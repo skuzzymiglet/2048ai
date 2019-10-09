@@ -25,8 +25,8 @@ class Game:
         """ Generate the subsequent board after moving """
 
         def moved(b, t):
-            return any(x != y for x, y in zip(b, t)) 
-            
+            return any(x != y for x, y in zip(b, t))
+
         for action, f in [("left",Game.left), ("down",Game.down), ("up",Game.up), ("right",Game.right)]:
             t = f(b)
             if moved(b, t):
@@ -45,7 +45,6 @@ class Game:
 
     def string(b):
         """ String to pretty print the board in matrix form """
-        
         return '\n'.join([''.join(['{:8}'.format(item) for item in row])
                                 for row in b])
 
@@ -56,18 +55,15 @@ class Game:
         rows, cols = list(range(4)), list(range(4))
         random.shuffle(rows)
         random.shuffle(cols)
-        
         copy  = [[x for x in row] for row in b]
         dist  = [2]*9 + [4]
         count = 0
         for i,j in itertools.product(rows, rows):
             if copy[i][j] != 0: continue
-            
             copy[i][j] = random.sample(dist, 1)[0]
             count += 1
             if count == k  : return copy
         raise Exception("shouldn't get here")
-        
     def left(b):
         """ Returns a left merged board
         >>> Game.left(test)
@@ -84,14 +80,14 @@ class Game:
 
         def reverse(x):
             return list(reversed(x))
-        
+
         t = map(reverse, iter(b))
         return [reverse(x) for x in Game.merge(t)]
 
     def up(b):
         """ Returns an upward merged board
             NOTE: zip(*t) is transpose
-            
+
         >>> Game.up(test) 
         [[4, 8, 4, 8], [4, 2, 0, 2], [0, 0, 0, 4], [0, 0, 0, 0]]
         """
@@ -105,7 +101,7 @@ class Game:
         >>> Game.down(test)
         [[0, 0, 0, 0], [0, 0, 0, 8], [4, 8, 0, 2], [4, 2, 4, 4]]
         """
-        
+
         t = Game.right(zip(*b))
         return [list(x) for x in zip(*t)]
 
@@ -118,7 +114,7 @@ class Game:
 
     def merge(b):
         """ Returns a left merged board """
-        
+
         def inner(row, a):
             """
             Helper for merge. If we're finished with the list,
@@ -126,7 +122,7 @@ class Game:
             if we have more than one element, combine results of first
             with right if they match; skip over right and continue merge
             """
-            
+
             if not row:
                 return a
             x = row[0]
@@ -162,7 +158,7 @@ def aimove(b):
         """
         if Game.over(b):
             return -float("inf")
-        
+
         snake = []
         for i, col in enumerate(zip(*b)):
             snake.extend(reversed(col) if i % 2 == 0 else col)
@@ -211,7 +207,6 @@ def aimove(b):
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 
-         
 def aiplay(b):
     """
     Runs the game playing the move that determined
@@ -220,7 +215,7 @@ def aiplay(b):
     while True:
         print(Game.string(b) + "\n")
         action = max(aimove(b), key = lambda x: x[1])[0]
-        
+
         if action == "left" : b = Game.left(b)
         if action == "right": b = Game.right(b)
         if action == "up"   : b = Game.up(b)
