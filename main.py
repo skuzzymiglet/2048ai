@@ -5,11 +5,17 @@ import sys
 from os import *
 import time
 import subprocess
-
+import colors
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
-
+def colorize_number(n):
+    color_dict = {0: "#ffffff", 2: "#dcd1c8", 4: "#d8cbb6", 8: "#e4a878", 16: "#d9804f", 32: "#e3755b", 64: "#d75337", 128: "#d9c062", 256: "#d9ba59", 512: "#d9b74a", 1024: "#d0a916", 2048: "#d9b32e", 4096: "#e63837"}
+    if n < 8:
+        fg = "#000000"
+    else:
+        fg = "#ffffff"
+    return colors.color(str(n).center(6), fg=fg, bg=color_dict[n])
 
 class Game:
     def __init__(self):
@@ -45,7 +51,7 @@ class Game:
 
     def string(b):
         """ String to pretty print the board in matrix form """
-        return '\n'.join([''.join(['{:8}'.format(item) for item in row])
+        return '\n'.join([''.join(['{:24}'.format(colorize_number(item)) for item in row])
                                 for row in b])
 
     def spawn(b, k=1):
