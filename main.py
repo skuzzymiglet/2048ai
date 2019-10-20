@@ -50,10 +50,12 @@ class Game:
         return not inner(b) and not inner(zip(*b))
 
     def string(b):
-        """ String to pretty print the board in matrix form """
-        return '\n'.join([''.join(['{:24}'.format(colorize_number(item)) for item in row])
-                                for row in b])
-
+        r = ""
+        for x in b:
+            for y in x:
+                r += colorize_number(y)
+            r += "\n"
+        return r
     def spawn(b, k=1):
         """ Add k random tiles to the board.
             Chance of 2 is 90%; chance of 4 is 10% """
