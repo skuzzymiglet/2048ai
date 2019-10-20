@@ -3,6 +3,7 @@ import math
 import random
 import sys
 from os import *
+import os
 import time
 import subprocess
 import colors
@@ -221,6 +222,7 @@ def aiplay(b):
     by aimove.
     """
     while True:
+        os.system("clear || cls")
         print(Game.string(b) + "\n")
         action = max(aimove(b), key = lambda x: x[1])[0]
 
