@@ -8,13 +8,16 @@ import pyfiglet
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
+
 def colorize_number(n):
-    color_dict = {0: "#ffffff", 2: "#dcd1c8", 4: "#d8cbb6", 8: "#e4a878", 16: "#d9804f", 32: "#e3755b", 64: "#d75337", 128: "#d9c062", 256: "#d9ba59", 512: "#d9b74a", 1024: "#d0a916", 2048: "#d9b32e", 4096: "#e63837"}
+    color_dict = {0: "#ffffff", 2: "#dcd1c8", 4: "#d8cbb6", 8: "#e4a878", 16: "#d9804f", 32: "#e3755b", 64: "#d75337",
+                  128: "#d9c062", 256: "#d9ba59", 512: "#d9b74a", 1024: "#d0a916", 2048: "#d9b32e", 4096: "#e63837"}
     if n < 8:
         fg = "#000000"
     else:
         fg = "#ffffff"
     return colors.color(str(n).center(6), fg=fg, bg=color_dict[n])
+
 
 class Game:
     def __init__(self):
@@ -32,7 +35,7 @@ class Game:
         def moved(b, t):
             return any(x != y for x, y in zip(b, t))
 
-        for action, f in [("left",Game.left), ("down",Game.down), ("up",Game.up), ("right",Game.right)]:
+        for action, f in [("left", Game.left), ("down", Game.down), ("up", Game.up), ("right", Game.right)]:
             t = f(b)
             if moved(b, t):
                 yield action, t
@@ -55,6 +58,7 @@ class Game:
                 r += colorize_number(y)
             r += "\n"
         return r
+
     def spawn(b, k=1):
         """ Add k random tiles to the board.
             Chance of 2 is 90%; chance of 4 is 10% """
@@ -62,15 +66,18 @@ class Game:
         rows, cols = list(range(4)), list(range(4))
         random.shuffle(rows)
         random.shuffle(cols)
-        copy  = [[x for x in row] for row in b]
-        dist  = [2]*9 + [4]
+        copy = [[x for x in row] for row in b]
+        dist = [2]*9 + [4]
         count = 0
-        for i,j in itertools.product(rows, rows):
-            if copy[i][j] != 0: continue
+        for i, j in itertools.product(rows, rows):
+            if copy[i][j] != 0:
+                continue
             copy[i][j] = random.sample(dist, 1)[0]
             count += 1
-            if count == k  : return copy
+            if count == k:
+                return copy
         raise Exception("shouldn't get here")
+
     def left(b):
         """ Returns a left merged board
         >>> Game.left(test)
@@ -113,11 +120,7 @@ class Game:
         return [list(x) for x in zip(*t)]
 
 
-
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-
-
-
 
     def merge(b):
         """ Returns a left merged board """
@@ -148,8 +151,6 @@ class Game:
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
 
-
-
 def aimove(b):
     """
     Returns a list of possible moves ("left", "right", "up", "down")
@@ -172,12 +173,10 @@ def aimove(b):
 
         m = max(snake)
         return sum(x/10**n for n, x in enumerate(snake)) - \
-               math.pow((b[3][0] != m)*abs(b[3][0] - m), 2)
+            math.pow((b[3][0] != m)*abs(b[3][0] - m), 2)
 
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
-
-
 
     def search(b, d, move=False):
         """
@@ -199,16 +198,17 @@ def aimove(b):
                 return max(alpha, search(child, d-1, False))
         else:
             alpha = 0
-            zeros = [(i,j) for i,j in itertools.product(range(4), range(4)) if b[i][j] == 0]
+            zeros = [(i, j) for i, j in itertools.product(
+                range(4), range(4)) if b[i][j] == 0]
             for i, j in zeros:
                 c1 = [[x for x in row] for row in b]
                 c2 = [[x for x in row] for row in b]
                 c1[i][j] = 2
                 c2[i][j] = 4
                 alpha += .9*search(c1, d-1, True)/len(zeros) + \
-                         .1*search(c2, d-1, True)/len(zeros)
+                    .1*search(c2, d-1, True)/len(zeros)
         return alpha
-    return [(action, search(child, 5)) for action ,child in Game.actions(b)]
+    return [(action, search(child, 5)) for action, child in Game.actions(b)]
 
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
@@ -222,19 +222,22 @@ def aiplay(b):
     while True:
         os.system("clear || cls")
         print(Game.string(b) + "\n")
-        action = max(aimove(b), key = lambda x: x[1])[0]
+        action = max(aimove(b), key=lambda x: x[1])[0]
 
-        if action == "left" : b = Game.left(b)
-        if action == "right": b = Game.right(b)
-        if action == "up"   : b = Game.up(b)
-        if action == "down" : b = Game.down(b)
+        if action == "left":
+            b = Game.left(b)
+        if action == "right":
+            b = Game.right(b)
+        if action == "up":
+            b = Game.up(b)
+        if action == "down":
+            b = Game.down(b)
         b = Game.spawn(b, 1)
         if Game.over(b):
             m = max(x for row in b for x in row)
-            print("game over...best was %s" %m)
+            print("game over...best was %s" % m)
             print(Game.string(b))
             break
-
 
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
@@ -269,9 +272,5 @@ def menu():
                 aiplay(b)
 
 
-
-
-
 #-----------------------# Main #------------------------#
-
 menu()
