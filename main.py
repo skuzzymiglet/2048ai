@@ -257,7 +257,7 @@ def menu():
 
 
 
-    welcome to AI 2048! Press q to quit or any other key to begin. Have fun!
+    Welcome to AI 2048! Press q to quit or any other key to begin. Have fun!
 
 
 
