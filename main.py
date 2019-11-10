@@ -5,6 +5,7 @@ import sys
 import os
 import colors
 import pyfiglet
+import time
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -251,22 +252,9 @@ def menu():
 
 
     """.format(f.renderText("2048 AI")))
-
-    q = False
-    f = False
-
-    while q == False:
-        while f == False:
-            a = input("""
-
-
-    enter here: """)
-            if a == 'q':
-                sys.exit()
-
-            else:
-                b = Game().b
-                aiplay(b)
+    time.sleep(2)
+    b = Game().b
+    aiplay(b)
 
 
 
