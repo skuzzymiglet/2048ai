@@ -4,8 +4,6 @@ import random
 import sys
 from os import *
 import os
-import time
-import subprocess
 import colors
 import pyfiglet
 
