@@ -1,7 +1,6 @@
 import itertools
 import math
 import random
-import sys
 import os
 import colors
 import pyfiglet
